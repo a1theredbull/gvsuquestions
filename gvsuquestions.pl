@@ -21,30 +21,30 @@ teacher(mrLange).
 teacher(msPosada).
 teacher(drDu).
 
-course(cs,467,cs_project,mak_b1118).
-course(is,463,is_project,mak_d2123).
-course(is,460,mis,mak_b1116).
-course(cs,457,data_communications,mak_d1117).
-course(cs,452,os_concepts,mak_d1117).
-course(cs,451,computer_architecture,mak_b1118).
-course(is,450,is_project_management,mak_d1117).
-course(is,443,software_development_tools,mak_b1124).
-course(cs,437,distributed_computing,mak_b1118).
-course(is,375,wireless_networking_systems,ec_612).
-course(cs,371,web_application_programming,mak_d1117).
-course(cs,365,ai,mak_d1117).
-course(cs,361,system_programming,mak_b1116).
-course(cs,358,information_insurance,mak_a1105).
-course(cs,353,database,mak_b1118).
-course(cs,350,software_engineering,mak_d1117).
-course(cs,343,structure_of_programming_languages,mak_b1124).
-course(is,339,it_project_management,mak_a1105).
-course(is,network_systems_management,mak_b1124).
-course(is,db_management_and_implementation,mak_d1117).
-course(is,systems_analysis_and_design,mak_d1117).
-course(cis,661,medical_and_bioinformatics,ec_612).
-course(cis,671,information_visualization,ec_612).
-course(cis,691,mbi_capstone,ec_612).
+course(cs,467,cs_project).
+course(is,463,is_project).
+course(is,460,mis).
+course(cs,457,data_communications).
+course(cs,452,os_concepts).
+course(cs,451,computer_architecture).
+course(is,450,is_project_management).
+course(is,443,software_development_tools).
+course(cs,437,distributed_computing).
+course(is,375,wireless_networking_systems).
+course(cs,371,web_application_programming).
+course(cs,365,ai).
+course(cs,361,system_programming).
+course(cs,358,information_insurance).
+course(cs,353,database).
+course(cs,350,software_engineering).
+course(cs,343,structure_of_programming_languages).
+course(is,339,it_project_management).
+course(is,337,network_systems_management).
+course(is,333,db_management_and_implementation).
+course(is,330,systems_analysis_and_design).
+course(cis,661,medical_and_bioinformatics).
+course(cis,671,information_visualization).
+course(cis,691,mbi_capstone).
 
 course_taught_by(467,drEngelsma).
 course_taught_by(463,mrLange).
@@ -71,39 +71,57 @@ course_taught_by(661,drJLeidig).
 course_taught_by(671,drJLeidig).
 course_taught_by(691,drJLeidig).
 
-course_scheduled(467,true,false,true,false,true,10,0,10,50).
-course_scheduled(463,true,false,true,false,true,14,0,14,50).
-course_scheduled(460,false,true,false,true,false,10,0,11,15).
-course_scheduled(457,true,false,true,false,true,14,0,14,50).
-course_scheduled(452,true,false,true,false,true,13,0,13,50).
-course_scheduled(451,true,false,true,false,true,10,0,10,50).
-course_scheduled(450,true,false,true,false,true,12,0,12,50).
-course_scheduled(443,true,false,true,false,true,11,0,11,50).
-course_scheduled(437,true,false,true,false,true,10,0,10,50).
-course_scheduled(375,false,false,false,true,false,18,0,19,50).
-course_scheduled(371,true,false,true,false,false,16,0,17,15).
-course_scheduled(365,false,true,false,true,false,10,0,11,15).
-course_scheduled(361,false,true,false,true,false,16,0,17,15).
-course_scheduled(358,true,false,true,false,true,15,0,15,50).
-course_scheduled(353,true,false,true,false,true,12,0,12,50).
-course_scheduled(350,true,false,true,false,true,10,0,10,50).
-course_scheduled(343,true,false,true,false,true,13,0,13,50).
-course_scheduled(339,false,true,false,true,false,13,0,14,15).
-course_scheduled(337,false,true,false,true,false,15,0,15,50).
-course_scheduled(333,false,false,true,false,false,18,0,20,50).
-course_scheduled(330,true,false,true,false,true,9,0,9,50).
-course_scheduled(661,false,true,false,false,false,18,0,20,50).
-course_scheduled(671,false,false,false,true,false,18,0,20,50).
-course_scheduled(691,true,false,false,false,false,18,0,20,50).
+course_scheduled(467,[monday,wednesday,friday],10,0,10,50,mak_b1118).
+course_scheduled(463,[monday,wednesday,friday],14,0,14,50,mak_d2123).
+course_scheduled(460,[tuesday,thursday],10,0,11,15,mak_b1116).
+course_scheduled(457,[monday,wednesday,friday],14,0,14,50,mak_d1117).
+course_scheduled(452,[monday,wednesday,friday],13,0,13,50,mak_d1117).
+course_scheduled(451,[monday,wednesday,friday],10,0,10,50,mak_b1118).
+course_scheduled(450,[monday,wednesday,friday],12,0,12,50,mak_d1117).
+course_scheduled(443,[monday,wednesday,friday],11,0,11,50,mak_b1124).
+course_scheduled(437,[monday,wednesday,friday],10,0,10,50,mak_b1118).
+course_scheduled(375,[thursday],18,0,19,50,ec_612).
+course_scheduled(371,[monday,wednesday],16,0,17,15,mak_d1117).
+course_scheduled(365,[tuesday,thursday],10,0,11,15,mak_d1117).
+course_scheduled(361,[tuesday,thursday],16,0,17,15,mak_b1116).
+course_scheduled(358,[monday,wednesday,friday],15,0,15,50,mak_a1105).
+course_scheduled(353,[monday,wednesday,friday],12,0,12,50,mak_b1118).
+course_scheduled(350,[monday,wednesday,friday],10,0,10,50,mak_d1117).
+course_scheduled(343,[monday,wednesday,friday],13,0,13,50,mak_b1124).
+course_scheduled(339,[tuesday,thursday],13,0,14,15,mak_a1105).
+course_scheduled(337,[tuesday,thursday],15,0,15,50,mak_b1124).
+course_scheduled(333,[wednesday],18,0,20,50,mak_d1117).
+course_scheduled(330,[monday,wednesday,friday],9,0,9,50,mak_d1117).
+course_scheduled(661,[tuesday],18,0,20,50,ec_612).
+course_scheduled(671,[thursday],18,0,20,50,ec_612).
+course_scheduled(691,[monday],18,0,20,50,ec_612).
 
 /* ----- Rules ----- */
 
+course_schedule_taught_by(CourseType, CourseNum, CourseName, Teacher, Days, StartHour, StartMin, EndHour, EndMin, Location) :- 
+	course_taught_by(CourseNum, Teacher),
+	course_scheduled(CourseNum, Days, StartHour, StartMin, EndHour, EndMin, Location),
+	course(CourseType, CourseNum, CourseName).
+
 /* ----- Goals ----- */
+
 print_solution :-
     /* Find the classes taught by Dr. J. Leidig */
         write('What does Dr. J. Leidig teach?'), nl,
-        findall(C,course_taught_by(C,drJLeidig),R),
-        write(R), nl.
+        findall((CourseType, CourseNum, CourseName),course_schedule_taught_by(CourseType, CourseNum, CourseName, drJLeidig, _, _, _, _, _, _),R1),
+        write(R1), nl, nl,
+
+	/* Does Dr. J. Leidig teach Database? */
+		write('Does Dr. J. Leidig teach Database?'), nl, nl,
+		
+	/* What is Dr. J. Leidigs schedule? */
+		write('What is Dr. J. Leidigs schedule?'), nl,
+		findall((CourseType, CourseNum, CourseName, Days, StartHour, StartMin, EndHour, EndMin, Location),
+			course_schedule_taught_by(CourseType, CourseNum, CourseName, drJLeidig, Days, StartHour, StartMin, EndHour, EndMin, Location),
+			R3),
+		write(R3), nl, nl.
+		
+		
 
 /* Run it */
 ?- print_solution.
