@@ -85,30 +85,30 @@ course_taught_by(661,'Dr. J Leidig').
 course_taught_by(671,'Dr. J Leidig').
 course_taught_by(691,'Dr. J Leidig').
 
-course_scheduled(467,['Monday','Wednesday','Friday'],10:00,10:50,'MAK B1118').
-course_scheduled(463,['Monday','Wednesday','Friday'],14:00,14:50,'MAK D2123').
-course_scheduled(460,['Tuesday','Thursday'],10:00,11:15,'MAK B1116').
-course_scheduled(457,['Monday','Wednesday','Friday'],14:00,14:50,'MAK D1117').
-course_scheduled(452,['Monday','Wednesday','Friday'],13:00,13:50,'MAK D1117').
-course_scheduled(451,['Monday','Wednesday','Friday'],10:00,10:50,'MAK B1118').
-course_scheduled(450,['Monday','Wednesday','Friday'],12:00,12:50,'MAK D1117').
-course_scheduled(443,['Monday','Wednesday','Friday'],11:00,11:50,'MAK B1124').
-course_scheduled(437,['Monday','Wednesday','Friday'],10:00,10:50,'MAK B1118').
-course_scheduled(375,['Thursday'],18:00,19:50,'EC 612').
-course_scheduled(371,['Monday','Wednesday'],16:00,17:15,'MAK D1117').
-course_scheduled(365,['Tuesday','Thursday'],10:00,11:15,'MAK D1117').
-course_scheduled(361,['Tuesday','Thursday'],16:00,17:15,'MAK B1116').
-course_scheduled(358,['Monday','Wednesday','Friday'],15:00,15:50,'MAK A1105').
-course_scheduled(353,['Monday','Wednesday','Friday'],12:00,12:50,'MAK B1118').
-course_scheduled(350,['Monday','Wednesday','Friday'],10:00,10:50,'MAK D1117').
-course_scheduled(343,['Monday','Wednesday','Friday'],13:00,13:50,'MAK B1124').
-course_scheduled(339,['Tuesday','Thursday'],13:00,14:15,'MAK A1105').
-course_scheduled(337,['Tuesday','Thursday'],15:00,15,50,'MAK B1124').
-course_scheduled(333,['Wednesday'],18:00,20:50,'MAK D1117').
-course_scheduled(330,['Monday','Wednesday','Friday'],9:00,9:50,'MAK D1117').
-course_scheduled(661,['Tuesday'],18:00,20:50,'EC 612').
-course_scheduled(671,['Thursday'],18:00,20:50,'EC 612').
-course_scheduled(691,['Monday'],18:00,20:50,'EC 612').
+course_scheduled(467,['Monday','Wednesday','Friday'],1000,1050,'MAK B1118').
+course_scheduled(463,['Monday','Wednesday','Friday'],1400,1450,'MAK D2123').
+course_scheduled(460,['Tuesday','Thursday'],1000,1115,'MAK B1116').
+course_scheduled(457,['Monday','Wednesday','Friday'],1400,1450,'MAK D1117').
+course_scheduled(452,['Monday','Wednesday','Friday'],1300,1350,'MAK D1117').
+course_scheduled(451,['Monday','Wednesday','Friday'],1000,1050,'MAK B1118').
+course_scheduled(450,['Monday','Wednesday','Friday'],1200,1250,'MAK D1117').
+course_scheduled(443,['Monday','Wednesday','Friday'],1100,1150,'MAK B1124').
+course_scheduled(437,['Monday','Wednesday','Friday'],1000,1050,'MAK B1118').
+course_scheduled(375,['Thursday'],1800,1950,'EC 612').
+course_scheduled(371,['Monday','Wednesday'],1600,1715,'MAK D1117').
+course_scheduled(365,['Tuesday','Thursday'],1000,1115,'MAK D1117').
+course_scheduled(361,['Tuesday','Thursday'],1600,1715,'MAK B1116').
+course_scheduled(358,['Monday','Wednesday','Friday'],1500,1550,'MAK A1105').
+course_scheduled(353,['Monday','Wednesday','Friday'],1200,1250,'MAK B1118').
+course_scheduled(350,['Monday','Wednesday','Friday'],1000,1050,'MAK D1117').
+course_scheduled(343,['Monday','Wednesday','Friday'],1300,1350,'MAK B1124').
+course_scheduled(339,['Tuesday','Thursday'],1300,1415,'MAK A1105').
+course_scheduled(337,['Tuesday','Thursday'],1500,1550,'MAK B1124').
+course_scheduled(333,['Wednesday'],1800,2050,'MAK D1117').
+course_scheduled(330,['Monday','Wednesday','Friday'],900,950,'MAK D1117').
+course_scheduled(661,['Tuesday'],1800,2050,'EC 612').
+course_scheduled(671,['Thursday'],1800,2050,'EC 612').
+course_scheduled(691,['Monday'],1800,2050,'EC 612').
 
 /* ----- Rules ----- */
 
@@ -126,53 +126,68 @@ common_taken_courses(StudentA, StudentB, CourseType, CourseNum, CourseName) :-
   student_enrolled_in(StudentB, CourseNum),
   course(CourseType, CourseNum, CourseName).
 
-time_conflict(DaysA, StartTimeA, EndTimeA, DaysB, StartTimeB, EndTimeB, DayConflict, TimeConflict) :-
+time_conflict(DaysA, StartTimeA, EndTimeA, DaysB, StartTimeB, EndTimeB) :-
   member(Day, DaysA),
   member(Day, DaysB),
+  StartTimeA =< EndTimeB, StartTimeB =< StartTimeA.
+
+teaching_time_conflict(TeacherA, TeacherB, CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB) :-
+  course_taught_by(CourseNumA, TeacherA),
+  course_taught_by(CourseNumB, TeacherB),
+  course_scheduled(CourseNumA, DaysA, StartTimeA, EndTimeA, _),
+  course_scheduled(CourseNumB, DaysB, StartTimeB, EndTimeB, _),
+  time_conflict(DaysA, StartTimeA, StartTimeA, DaysB, StartTimeB, EndTimeB).
 
 /* ----- Goals ----- */
 
 print_solution :-
-  /* Find the classes taught by Dr. J. Leidig */
-    write('What does Dr. J. Leidig teach?'), nl,
+  /* 1. Find the classes taught by Dr. J. Leidig */
+    write('1. What does Dr. J. Leidig teach?'), nl,
     findall((CourseType, CourseNum, CourseName), course_schedule_taught_by(CourseType, CourseNum, CourseName, 'Dr. J Leidig', _, _, _, _), R1),
     write(R1), nl, nl,
 
-	/* Does Dr. J. Leidig teach Database? */
-		write('Does Dr. J. Leidig teach Database?'), nl,
+	/* 2. Does Dr. J. Leidig teach Database? */
+		write('2. Does Dr. J. Leidig teach Database?'), nl,
     findall((CourseNum, Teacher), course_taught_by(353, 'Dr. J Leidig'), R2),
     write(R2), nl, nl,
 		
-	/* What is Dr. J. Leidigs schedule? */
-		write('What is Dr. J. Leidig\'s schedule?'), nl,
+	/* 3. What is Dr. J. Leidigs schedule? */
+		write('3. What is Dr. J. Leidig\'s schedule?'), nl,
 		findall((CourseType, CourseNum, CourseName, Days, StartTime, EndTime, Location),
 			course_schedule_taught_by(CourseType, CourseNum, CourseName, 'Dr. J Leidig', Days, StartTime, EndTime, Location),
 			R3),
 		write(R3), nl, nl,
 		
-  /* Who is scheduled to teach what subject on TTH, 10am? */
-    write('Who is scheduled to teach what subject on TTH, 10am?'), nl,
+  /* 4. Who is scheduled to teach what subject on TTH, 10am? */
+    write('4. Who is scheduled to teach what subject on TTH, 10am?'), nl,
     findall((CourseType, CourseNum, CourseName, Teacher),
-      course_schedule_taught_by(CourseType, CourseNum, CourseName, Teacher, ['Tuesday','Thursday'], 10:00, _, _),
+      course_schedule_taught_by(CourseType, CourseNum, CourseName, Teacher, ['Tuesday','Thursday'], 1000, _, _),
       R4),
     write(R4), nl, nl,
 
-  /* What courses do Jim and Pam have in common? */
-    write('What courses do Jim and Pam have in common?'), nl,
+  /* 5. When do Dr. J. Leidig and Dr. El-Said teach at the same time? */
+    write('5. When do Dr. J. Leidig and Dr. El-Said teach at the same time?'), nl,
+    findall((CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB),
+      teaching_time_conflict('Dr. J Leidig', 'Dr. El-Said', CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB),
+      R5),
+    write(R5), nl, nl,
+
+  /* 7. What courses do Jim and Pam have in common? */
+    write('7. What courses do Jim and Pam have in common?'), nl,
     findall((CourseType, CourseNum, CourseName),
       common_taken_courses('Jim', 'Pam', CourseType, CourseNum, CourseName),
       R7),
     write(R7), nl, nl,
 
-	/* Who is taking CS courses? */
-		write('Who is taking CS courses?'), nl,
+	/* 8. Who is taking CS courses? */
+		write('8. Who is taking CS courses?'), nl,
 		setof((Student),
 			course_types_taken_by_student('CS',Student),
 			R8),
 		write(R8), nl, nl,
 		
-	/* What types of courses are Gaius Baltar taking? */
-		write('What types of courses are Gaius Baltar taking?'), nl,
+	/* 9. What types of courses are Gaius Baltar taking? */
+		write('9. What types of courses are Gaius Baltar taking?'), nl,
 		setof((CourseType),
 			course_types_taken_by_student(CourseType, 'Gaius Baltar'),
 			R9),
