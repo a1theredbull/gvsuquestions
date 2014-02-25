@@ -84,30 +84,30 @@ course_taught_by(661,drJLeidig).
 course_taught_by(671,drJLeidig).
 course_taught_by(691,drJLeidig).
 
-course_scheduled(467,[monday,wednesday,friday],10,0,10,50,mak_b1118).
-course_scheduled(463,[monday,wednesday,friday],14,0,14,50,mak_d2123).
-course_scheduled(460,[tuesday,thursday],10,0,11,15,mak_b1116).
-course_scheduled(457,[monday,wednesday,friday],14,0,14,50,mak_d1117).
-course_scheduled(452,[monday,wednesday,friday],13,0,13,50,mak_d1117).
-course_scheduled(451,[monday,wednesday,friday],10,0,10,50,mak_b1118).
-course_scheduled(450,[monday,wednesday,friday],12,0,12,50,mak_d1117).
-course_scheduled(443,[monday,wednesday,friday],11,0,11,50,mak_b1124).
-course_scheduled(437,[monday,wednesday,friday],10,0,10,50,mak_b1118).
-course_scheduled(375,[thursday],18,0,19,50,ec_612).
-course_scheduled(371,[monday,wednesday],16,0,17,15,mak_d1117).
-course_scheduled(365,[tuesday,thursday],10,0,11,15,mak_d1117).
-course_scheduled(361,[tuesday,thursday],16,0,17,15,mak_b1116).
-course_scheduled(358,[monday,wednesday,friday],15,0,15,50,mak_a1105).
-course_scheduled(353,[monday,wednesday,friday],12,0,12,50,mak_b1118).
-course_scheduled(350,[monday,wednesday,friday],10,0,10,50,mak_d1117).
-course_scheduled(343,[monday,wednesday,friday],13,0,13,50,mak_b1124).
-course_scheduled(339,[tuesday,thursday],13,0,14,15,mak_a1105).
-course_scheduled(337,[tuesday,thursday],15,0,15,50,mak_b1124).
-course_scheduled(333,[wednesday],18,0,20,50,mak_d1117).
-course_scheduled(330,[monday,wednesday,friday],9,0,9,50,mak_d1117).
-course_scheduled(661,[tuesday],18,0,20,50,ec_612).
-course_scheduled(671,[thursday],18,0,20,50,ec_612).
-course_scheduled(691,[monday],18,0,20,50,ec_612).
+course_scheduled(467,[monday,wednesday,friday],10:00,10:50,mak_b1118).
+course_scheduled(463,[monday,wednesday,friday],14:00,14:50,mak_d2123).
+course_scheduled(460,[tuesday,thursday],10:00,11:15,mak_b1116).
+course_scheduled(457,[monday,wednesday,friday],14:00,14:50,mak_d1117).
+course_scheduled(452,[monday,wednesday,friday],13:00,13:50,mak_d1117).
+course_scheduled(451,[monday,wednesday,friday],10:00,10:50,mak_b1118).
+course_scheduled(450,[monday,wednesday,friday],12:00,12:50,mak_d1117).
+course_scheduled(443,[monday,wednesday,friday],11:00,11:50,mak_b1124).
+course_scheduled(437,[monday,wednesday,friday],10:00,10:50,mak_b1118).
+course_scheduled(375,[thursday],18:00,19:50,ec_612).
+course_scheduled(371,[monday,wednesday],16:00,17:15,mak_d1117).
+course_scheduled(365,[tuesday,thursday],10:00,11:15,mak_d1117).
+course_scheduled(361,[tuesday,thursday],16:00,17:15,mak_b1116).
+course_scheduled(358,[monday,wednesday,friday],15:00,15:50,mak_a1105).
+course_scheduled(353,[monday,wednesday,friday],12:00,12:50,mak_b1118).
+course_scheduled(350,[monday,wednesday,friday],10:00,10:50,mak_d1117).
+course_scheduled(343,[monday,wednesday,friday],13:00,13:50,mak_b1124).
+course_scheduled(339,[tuesday,thursday],13:00,14:15,mak_a1105).
+course_scheduled(337,[tuesday,thursday],15:00,15,50,mak_b1124).
+course_scheduled(333,[wednesday],18:00,20:50,mak_d1117).
+course_scheduled(330,[monday,wednesday,friday],9:00,9:50,mak_d1117).
+course_scheduled(661,[tuesday],18:00,20:50,ec_612).
+course_scheduled(671,[thursday],18:00,20:50,ec_612).
+course_scheduled(691,[monday],18:00,20:50,ec_612).
 
 /* ----- Rules ----- */
 
@@ -115,33 +115,45 @@ cs_course_taken_by(Student) :-
 	student_enrolled_in(Student, CourseNum),
 	course(cs, CourseNum, CourseName).
 
-course_schedule_taught_by(CourseType, CourseNum, CourseName, Teacher, Days, StartHour, StartMin, EndHour, EndMin, Location) :- 
+course_schedule_taught_by(CourseType, CourseNum, CourseName, Teacher, Days, StartTime, EndTime, Location) :- 
 	course_taught_by(CourseNum, Teacher),
-	course_scheduled(CourseNum, Days, StartHour, StartMin, EndHour, EndMin, Location),
+	course_scheduled(CourseNum, Days, StartTime, EndTime, Location),
 	course(CourseType, CourseNum, CourseName).
+
 
 /* ----- Goals ----- */
 
 print_solution :-
-    /* Find the classes taught by Dr. J. Leidig */
-        write('What does Dr. J. Leidig teach?'), nl,
-        findall((CourseType, CourseNum, CourseName),course_schedule_taught_by(CourseType, CourseNum, CourseName, drJLeidig, _, _, _, _, _, _),R1),
-        write(R1), nl, nl,
+  /* Find the classes taught by Dr. J. Leidig */
+    write('What does Dr. J. Leidig teach?'), nl,
+    findall((CourseType, CourseNum, CourseName), course_schedule_taught_by(CourseType, CourseNum, CourseName, drJLeidig, _, _, _, _), R1),
+    write(R1), nl, nl,
+
+	/* Does Dr. J. Leidig teach Database? */
+		write('Does Dr. J. Leidig teach Database?'), nl,
+    findall((CourseNum, Teacher), course_taught_by(353, drJLeidig), R2),
+    write(R2), nl, nl,
 		
 	/* What is Dr. J. Leidigs schedule? */
-		write('What is Dr. J. Leidigs schedule?'), nl,
-		findall((CourseType, CourseNum, CourseName, Days, StartHour, StartMin, EndHour, EndMin, Location),
-			course_schedule_taught_by(CourseType, CourseNum, CourseName, drJLeidig, Days, StartHour, StartMin, EndHour, EndMin, Location),
+		write('What is Dr. J. Leidig\'s schedule?'), nl,
+		findall((CourseType, CourseNum, CourseName, Days, StartTime, EndTime, Location),
+			course_schedule_taught_by(CourseType, CourseNum, CourseName, drJLeidig, Days, StartTime, EndTime, Location),
 			R3),
 		write(R3), nl, nl,
 		
+  /* Who is scheduled to teach what subject on TTH, 10am? */
+    write('Who is scheduled to teach what subject on TTH, 10am?'), nl,
+    findall((CourseType, CourseNum, CourseName, Teacher),
+      course_schedule_taught_by(CourseType, CourseNum, CourseName, Teacher, [tuesday,thursday], 10:00, _, _),
+      R4),
+    write(R4), nl, nl,
+
 	/* Who is taking CS courses? */
 		write('Who is taking CS courses?'), nl,
 		setof((Student),
 			cs_course_taken_by(Student),
 			R8),
 		write(R8), nl, nl.
-		
 		
 
 /* Run it */
