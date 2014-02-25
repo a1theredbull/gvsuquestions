@@ -111,9 +111,9 @@ course_scheduled(691,[monday],18:00,20:50,ec_612).
 
 /* ----- Rules ----- */
 
-cs_course_taken_by(Student) :- 
+course_types_taken_by_student(CourseType, Student) :-
 	student_enrolled_in(Student, CourseNum),
-	course(cs, CourseNum, CourseName).
+	course(CourseType, CourseNum, CourseName).
 
 course_schedule_taught_by(CourseType, CourseNum, CourseName, Teacher, Days, StartTime, EndTime, Location) :- 
 	course_taught_by(CourseNum, Teacher),
@@ -151,9 +151,16 @@ print_solution :-
 	/* Who is taking CS courses? */
 		write('Who is taking CS courses?'), nl,
 		setof((Student),
-			cs_course_taken_by(Student),
+			course_types_taken_by_student(cs,Student),
 			R8),
-		write(R8), nl, nl.
+		write(R8), nl, nl,
+		
+	/* What types of courses are Gaius Baltar taking? */
+		write('What types of courses are Gaius Baltar taking?'), nl,
+		setof((CourseType),
+			course_types_taken_by_student(CourseType, gaiusBaltar),
+			R9),
+		write(R9), nl, nl.
 		
 
 /* Run it */
