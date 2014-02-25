@@ -5,6 +5,19 @@ student(pam).
 student(karaThrace).
 student(gaiusBaltar).
 
+student_enrolled_in(jim,467).
+student_enrolled_in(jim,452).
+student_enrolled_in(jim,457).
+student_enrolled_in(pam,437).
+student_enrolled_in(pam,457).
+student_enrolled_in(pam,452).
+student_enrolled_in(karaThrace,467).
+student_enrolled_in(karaThrace,452).
+student_enrolled_in(karaThrace,365).
+student_enrolled_in(gaiusBaltar,463).
+student_enrolled_in(gaiusBaltar,460).
+student_enrolled_in(gaiusBaltar,375).
+
 teacher(drSchymik).
 teacher(msPeterman).
 teacher(drEngelsma).
@@ -98,6 +111,10 @@ course_scheduled(691,[monday],18,0,20,50,ec_612).
 
 /* ----- Rules ----- */
 
+cs_course_taken_by(Student) :- 
+	student_enrolled_in(Student, CourseNum),
+	course(cs, CourseNum, CourseName).
+
 course_schedule_taught_by(CourseType, CourseNum, CourseName, Teacher, Days, StartHour, StartMin, EndHour, EndMin, Location) :- 
 	course_taught_by(CourseNum, Teacher),
 	course_scheduled(CourseNum, Days, StartHour, StartMin, EndHour, EndMin, Location),
@@ -110,16 +127,20 @@ print_solution :-
         write('What does Dr. J. Leidig teach?'), nl,
         findall((CourseType, CourseNum, CourseName),course_schedule_taught_by(CourseType, CourseNum, CourseName, drJLeidig, _, _, _, _, _, _),R1),
         write(R1), nl, nl,
-
-	/* Does Dr. J. Leidig teach Database? */
-		write('Does Dr. J. Leidig teach Database?'), nl, nl,
 		
 	/* What is Dr. J. Leidigs schedule? */
 		write('What is Dr. J. Leidigs schedule?'), nl,
 		findall((CourseType, CourseNum, CourseName, Days, StartHour, StartMin, EndHour, EndMin, Location),
 			course_schedule_taught_by(CourseType, CourseNum, CourseName, drJLeidig, Days, StartHour, StartMin, EndHour, EndMin, Location),
 			R3),
-		write(R3), nl, nl.
+		write(R3), nl, nl,
+		
+	/* Who is taking CS courses? */
+		write('Who is taking CS courses?'), nl,
+		setof((Student),
+			cs_course_taken_by(Student),
+			R8),
+		write(R8), nl, nl.
 		
 		
 
