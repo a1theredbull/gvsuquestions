@@ -147,6 +147,14 @@ teaching_time_location_conflict(TeacherA, TeacherB, CourseNumA, StartTimeA, EndT
   time_conflict(DaysA, StartTimeA, StartTimeA, DaysB, StartTimeB, EndTimeB),
   TeacherA \= TeacherB.
 
+teaching_time_professor_conflict(Teacher, CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB) :-
+  course_taught_by(CourseNumA, Teacher),
+  course_taught_by(CourseNumB, Teacher),
+  course_scheduled(CourseNumA, DaysA, StartTimeA, EndTimeA, _),
+  course_scheduled(CourseNumB, DaysB, StartTimeB, EndTimeB, _),
+  time_conflict(DaysA, StartTimeA, StartTimeA, DaysB, StartTimeB, EndTimeB),
+  CourseNumA \= CourseNumB.
+
 /* ----- Goals ----- */
 
 print_solution :-
@@ -210,11 +218,17 @@ print_solution :-
 		write(R9), nl, nl,
 
   /* 10. Are there any scheduling conflicts of professors and locations? */
-    write('10. Are there any scheduling conflicts of professors and locations?'), nl,
+    write('10. Are there any scheduling conflicts of professors and locations?'), nl, nl,
+    write('Location conflicts!'), nl,
     setof((TeacherA, CourseNumA, StartTimeA, EndTimeA, TeacherB, CourseNumB, StartTimeB, EndTimeB, Location),
       teaching_time_location_conflict(TeacherA, TeacherB, CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB, Location),
       R10),
-    write(R10), nl, nl.
+    write(R10), nl, nl,
+    write('Professor conflicts!'), nl,
+    setof((Teacher, CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB),
+      teaching_time_professor_conflict(Teacher, CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB),
+      R11),
+    write(R11).
 
 /* Run it */
 ?- print_solution.
