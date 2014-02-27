@@ -131,7 +131,15 @@ time_conflict(DaysA, StartTimeA, EndTimeA, DaysB, StartTimeB, EndTimeB) :-
   member(Day, DaysB),
   StartTimeA =< EndTimeB, StartTimeB =< StartTimeA.
 
-teaching_time_conflict(TeacherA, TeacherB, CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB, Location) :-
+teaching_time_conflict(TeacherA, TeacherB, CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB) :-
+  course_taught_by(CourseNumA, TeacherA),
+  course_taught_by(CourseNumB, TeacherB),
+  course_scheduled(CourseNumA, DaysA, StartTimeA, EndTimeA, _),
+  course_scheduled(CourseNumB, DaysB, StartTimeB, EndTimeB, _),
+  time_conflict(DaysA, StartTimeA, StartTimeA, DaysB, StartTimeB, EndTimeB),
+  TeacherA \= TeacherB.
+
+teaching_time_location_conflict(TeacherA, TeacherB, CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB, Location) :-
   course_taught_by(CourseNumA, TeacherA),
   course_taught_by(CourseNumB, TeacherB),
   course_scheduled(CourseNumA, DaysA, StartTimeA, EndTimeA, Location),
@@ -169,14 +177,14 @@ print_solution :-
   /* 5. When do Dr. J. Leidig and Dr. El-Said teach at the same time? */
     write('5. When do Dr. J. Leidig and Dr. El-Said teach at the same time?'), nl,
     findall((CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB),
-      teaching_time_conflict('Dr. J Leidig', 'Dr. El-Said', CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB, _),
+      teaching_time_conflict('Dr. J Leidig', 'Dr. El-Said', CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB),
       R5),
     write(R5), nl, nl,
 
   /* 6. Who teaches at the same time as Dr. J Leidig? */
     write('6. Who teaches at the same time as Dr. J Leidig?'), nl,
     setof(('Dr. J Leidig', CourseNumA, StartTimeA, EndTimeA, Teacher, CourseNumB, StartTimeB, EndTimeB),
-      teaching_time_conflict('Dr. J Leidig', Teacher, CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB, _),
+      teaching_time_conflict('Dr. J Leidig', Teacher, CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB),
       R6),
     write(R6), nl, nl,
 
@@ -199,7 +207,14 @@ print_solution :-
 		setof((CourseType),
 			course_types_taken_by_student(CourseType, 'Gaius Baltar'),
 			R9),
-		write(R9), nl, nl.
+		write(R9), nl, nl,
+
+  /* 10. Are there any scheduling conflicts of professors and locations? */
+    write('10. Are there any scheduling conflicts of professors and locations?'), nl,
+    setof((TeacherA, CourseNumA, StartTimeA, EndTimeA, TeacherB, CourseNumB, StartTimeB, EndTimeB, Location),
+      teaching_time_location_conflict(TeacherA, TeacherB, CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB, Location),
+      R10),
+    write(R10), nl, nl.
 
 /* Run it */
 ?- print_solution.
