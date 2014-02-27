@@ -131,12 +131,13 @@ time_conflict(DaysA, StartTimeA, EndTimeA, DaysB, StartTimeB, EndTimeB) :-
   member(Day, DaysB),
   StartTimeA =< EndTimeB, StartTimeB =< StartTimeA.
 
-teaching_time_conflict(TeacherA, TeacherB, CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB) :-
+teaching_time_conflict(TeacherA, TeacherB, CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB, Location) :-
   course_taught_by(CourseNumA, TeacherA),
   course_taught_by(CourseNumB, TeacherB),
-  course_scheduled(CourseNumA, DaysA, StartTimeA, EndTimeA, _),
-  course_scheduled(CourseNumB, DaysB, StartTimeB, EndTimeB, _),
-  time_conflict(DaysA, StartTimeA, StartTimeA, DaysB, StartTimeB, EndTimeB).
+  course_scheduled(CourseNumA, DaysA, StartTimeA, EndTimeA, Location),
+  course_scheduled(CourseNumB, DaysB, StartTimeB, EndTimeB, Location),
+  time_conflict(DaysA, StartTimeA, StartTimeA, DaysB, StartTimeB, EndTimeB),
+  TeacherA \= TeacherB.
 
 /* ----- Goals ----- */
 
@@ -168,9 +169,16 @@ print_solution :-
   /* 5. When do Dr. J. Leidig and Dr. El-Said teach at the same time? */
     write('5. When do Dr. J. Leidig and Dr. El-Said teach at the same time?'), nl,
     findall((CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB),
-      teaching_time_conflict('Dr. J Leidig', 'Dr. El-Said', CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB),
+      teaching_time_conflict('Dr. J Leidig', 'Dr. El-Said', CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB, _),
       R5),
     write(R5), nl, nl,
+
+  /* 6. Who teaches at the same time as Dr. J Leidig? */
+    write('6. Who teaches at the same time as Dr. J Leidig?'), nl,
+    setof(('Dr. J Leidig', CourseNumA, StartTimeA, EndTimeA, Teacher, CourseNumB, StartTimeB, EndTimeB),
+      teaching_time_conflict('Dr. J Leidig', Teacher, CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB, _),
+      R6),
+    write(R6), nl, nl,
 
   /* 7. What courses do Jim and Pam have in common? */
     write('7. What courses do Jim and Pam have in common?'), nl,
