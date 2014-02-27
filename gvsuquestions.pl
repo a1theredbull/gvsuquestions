@@ -139,7 +139,7 @@ teaching_time_conflict(TeacherA, TeacherB, CourseNumA, StartTimeA, EndTimeA, Cou
   time_conflict(DaysA, StartTimeA, StartTimeA, DaysB, StartTimeB, EndTimeB),
   TeacherA \= TeacherB.
 
-teaching_time_location_conflict(TeacherA, TeacherB, CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB, Location) :-
+teaching_time_location_conflict(TeacherA, TeacherB, CourseNumA, DaysA, StartTimeA, EndTimeA, CourseNumB, DaysB, StartTimeB, EndTimeB, Location) :-
   course_taught_by(CourseNumA, TeacherA),
   course_taught_by(CourseNumB, TeacherB),
   course_scheduled(CourseNumA, DaysA, StartTimeA, EndTimeA, Location),
@@ -147,7 +147,7 @@ teaching_time_location_conflict(TeacherA, TeacherB, CourseNumA, StartTimeA, EndT
   time_conflict(DaysA, StartTimeA, StartTimeA, DaysB, StartTimeB, EndTimeB),
   TeacherA \= TeacherB.
 
-teaching_time_professor_conflict(Teacher, CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB) :-
+teaching_time_professor_conflict(Teacher, CourseNumA, DaysA, StartTimeA, EndTimeA, CourseNumB, DaysB, StartTimeB, EndTimeB) :-
   course_taught_by(CourseNumA, Teacher),
   course_taught_by(CourseNumB, Teacher),
   course_scheduled(CourseNumA, DaysA, StartTimeA, EndTimeA, _),
@@ -220,13 +220,13 @@ print_solution :-
   /* 10. Are there any scheduling conflicts of professors and locations? */
     write('10. Are there any scheduling conflicts of professors and locations?'), nl, nl,
     write('Location conflicts!'), nl,
-    setof((TeacherA, CourseNumA, StartTimeA, EndTimeA, TeacherB, CourseNumB, StartTimeB, EndTimeB, Location),
-      teaching_time_location_conflict(TeacherA, TeacherB, CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB, Location),
+    setof((TeacherA, CourseNumA, DaysA, StartTimeA, EndTimeA, TeacherB, CourseNumB, DaysB, StartTimeB, EndTimeB, Location),
+      teaching_time_location_conflict(TeacherA, TeacherB, CourseNumA, DaysA, StartTimeA, EndTimeA, CourseNumB, DaysB, StartTimeB, EndTimeB, Location),
       R10),
     write(R10), nl, nl,
     write('Professor conflicts!'), nl,
-    setof((Teacher, CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB),
-      teaching_time_professor_conflict(Teacher, CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB),
+    setof((Teacher, CourseNumA, StartTimeA, DaysA, EndTimeA, CourseNumB, DaysB, StartTimeB, EndTimeB),
+      teaching_time_professor_conflict(Teacher, CourseNumA, DaysA, StartTimeA, EndTimeA, CourseNumB, DaysB, StartTimeB, EndTimeB),
       R11),
     write(R11).
 
