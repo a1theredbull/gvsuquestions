@@ -131,7 +131,7 @@ time_conflict(DaysA, StartTimeA, EndTimeA, DaysB, StartTimeB, EndTimeB) :-
   member(Day, DaysB),
   StartTimeA =< EndTimeB, StartTimeB =< StartTimeA.
 
-teaching_time_conflict(TeacherA, TeacherB, CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB) :-
+teaching_time_conflict(TeacherA, TeacherB, CourseNumA, DaysA, StartTimeA, EndTimeA, CourseNumB, DaysB, StartTimeB, EndTimeB) :-
   course_taught_by(CourseNumA, TeacherA),
   course_taught_by(CourseNumB, TeacherB),
   course_scheduled(CourseNumA, DaysA, StartTimeA, EndTimeA, _),
@@ -191,8 +191,8 @@ print_solution :-
 
   /* 6. Who teaches at the same time as Dr. J Leidig? */
     write('6. Who teaches at the same time as Dr. J Leidig?'), nl,
-    setof(('Dr. J Leidig', CourseNumA, StartTimeA, EndTimeA, Teacher, CourseNumB, StartTimeB, EndTimeB),
-      teaching_time_conflict('Dr. J Leidig', Teacher, CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB),
+    setof(('Dr. J Leidig', CourseNumA, DaysA, StartTimeA, EndTimeA, Teacher, CourseNumB, DaysB, StartTimeB, EndTimeB),
+      teaching_time_conflict('Dr. J Leidig', Teacher, CourseNumA, DaysA, StartTimeA, EndTimeA, CourseNumB, DaysB, StartTimeB, EndTimeB),
       R6),
     write(R6), nl, nl,
 
