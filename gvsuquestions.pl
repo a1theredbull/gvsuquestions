@@ -185,7 +185,7 @@ print_solution :-
   /* 5. When do Dr. J. Leidig and Dr. El-Said teach at the same time? */
     write('5. When do Dr. J. Leidig and Dr. El-Said teach at the same time?'), nl,
     findall((CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB),
-      teaching_time_conflict('Dr. J Leidig', 'Dr. El-Said', CourseNumA, StartTimeA, EndTimeA, CourseNumB, StartTimeB, EndTimeB),
+      teaching_time_conflict('Dr. J Leidig', 'Dr. El-Said', CourseNumA, DaysA, StartTimeA, EndTimeA, CourseNumB, DaysB, StartTimeB, EndTimeB),
       R5),
     write(R5), nl, nl,
 
