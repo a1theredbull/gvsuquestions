@@ -1,10 +1,21 @@
+/*********************************************************
+* Author: Alex Chau & Conner Fallone
+* Class: CIS-365
+* Winter 2014
+* Answers questions based mybanner data from GVSU.
+* This data includes students enrolled in which classes
+* and which clases each professor teaches and where.
+**********************************************************/
+
 /* ----- Facts ----- */
 
+/* Students in our dataset */
 student('Jim').
 student('Pam').
 student('Kara Thrace').
 student('Gaius Baltar').
 
+/* Courses that students are enrolled in */
 student_enrolled_in('Jim',467).
 student_enrolled_in('Jim',452).
 student_enrolled_in('Jim',457).
@@ -19,6 +30,7 @@ student_enrolled_in('Gaius Baltar',460).
 student_enrolled_in('Gaius Baltar',375).
 student_enrolled_in('Pam',463).
 
+/* Teachers in our dataset */
 teacher('Dr. Schymik').
 teacher('Ms. Peterman').
 teacher('Dr. Engelsma').
@@ -35,6 +47,7 @@ teacher('Mr. Lange').
 teacher('Ms. Posada').
 teacher('Dr. Du').
 
+/* All of the coures in our dataset. Course Type-Number-Name */
 course('CS',467,'CS Project').
 course('IS',463,'IS Project').
 course('IS',460,'MIS').
@@ -60,6 +73,7 @@ course('CIS',661,'Medical and Bioinformatics').
 course('CIS',671,'Information Visualization').
 course('CIS',691,'MBI Capstone').
 
+/* Which courses are taught by which professors */
 course_taught_by(467,'Dr. Engelsma').
 course_taught_by(463,'Mr. Lange').
 course_taught_by(460,'Dr. P Leidig').
@@ -85,6 +99,7 @@ course_taught_by(661,'Dr. J Leidig').
 course_taught_by(671,'Dr. J Leidig').
 course_taught_by(691,'Dr. J Leidig').
 
+/* Course schedules. Course Number - Days - Times(Army) - Location */
 course_scheduled(467,['Monday','Wednesday','Friday'],1000,1050,'MAK B1118').
 course_scheduled(463,['Monday','Wednesday','Friday'],1400,1450,'MAK D2123').
 course_scheduled(460,['Tuesday','Thursday'],1000,1115,'MAK B1116').
@@ -112,25 +127,30 @@ course_scheduled(691,['Monday'],1800,2050,'EC 612').
 
 /* ----- Rules ----- */
 
+/* Used to retrieve types of courses a student is taking */
 course_types_taken_by_student(CourseType, Student) :-
 	student_enrolled_in(Student, CourseNum),
 	course(CourseType, CourseNum, CourseName).
 
+/* Get a professor's schedule */
 course_schedule_taught_by(CourseType, CourseNum, CourseName, Teacher, Days, StartTime, EndTime, Location) :- 
 	course_taught_by(CourseNum, Teacher),
 	course_scheduled(CourseNum, Days, StartTime, EndTime, Location),
 	course(CourseType, CourseNum, CourseName).
 
+/* Same courses taken by different students */
 common_taken_courses(StudentA, StudentB, CourseType, CourseNum, CourseName) :-
   student_enrolled_in(StudentA, CourseNum),
   student_enrolled_in(StudentB, CourseNum),
   course(CourseType, CourseNum, CourseName).
 
+/* Time conflicts for classes */
 time_conflict(DaysA, StartTimeA, EndTimeA, DaysB, StartTimeB, EndTimeB) :-
   member(Day, DaysA),
   member(Day, DaysB),
   StartTimeA =< EndTimeB, StartTimeB =< StartTimeA.
 
+/* Time conflicts between professors */
 teaching_time_conflict(TeacherA, TeacherB, CourseNumA, DaysA, StartTimeA, EndTimeA, CourseNumB, DaysB, StartTimeB, EndTimeB) :-
   course_taught_by(CourseNumA, TeacherA),
   course_taught_by(CourseNumB, TeacherB),
@@ -139,6 +159,7 @@ teaching_time_conflict(TeacherA, TeacherB, CourseNumA, DaysA, StartTimeA, EndTim
   time_conflict(DaysA, StartTimeA, StartTimeA, DaysB, StartTimeB, EndTimeB),
   TeacherA \= TeacherB.
 
+/* Location conflicts */
 teaching_time_location_conflict(TeacherA, TeacherB, CourseNumA, DaysA, StartTimeA, EndTimeA, CourseNumB, DaysB, StartTimeB, EndTimeB, Location) :-
   course_taught_by(CourseNumA, TeacherA),
   course_taught_by(CourseNumB, TeacherB),
@@ -147,6 +168,7 @@ teaching_time_location_conflict(TeacherA, TeacherB, CourseNumA, DaysA, StartTime
   time_conflict(DaysA, StartTimeA, StartTimeA, DaysB, StartTimeB, EndTimeB),
   TeacherA \= TeacherB.
 
+/* Time conflict with the same professor */
 teaching_time_professor_conflict(Teacher, CourseNumA, DaysA, StartTimeA, EndTimeA, CourseNumB, DaysB, StartTimeB, EndTimeB) :-
   course_taught_by(CourseNumA, Teacher),
   course_taught_by(CourseNumB, Teacher),
@@ -163,17 +185,17 @@ print_solution :-
     findall((CourseType, CourseNum, CourseName), course_schedule_taught_by(CourseType, CourseNum, CourseName, 'Dr. J Leidig', _, _, _, _), R1),
     write(R1), nl, nl,
 
-	/* 2. Does Dr. J. Leidig teach Database? */
-		write('2. Does Dr. J. Leidig teach Database?'), nl,
+  /* 2. Does Dr. J. Leidig teach Database? */
+    write('2. Does Dr. J. Leidig teach Database?'), nl,
     findall((CourseNum, Teacher), course_taught_by(353, 'Dr. J Leidig'), R2),
     write(R2), nl, nl,
 		
-	/* 3. What is Dr. J. Leidigs schedule? */
-		write('3. What is Dr. J. Leidig\'s schedule?'), nl,
-		findall((CourseType, CourseNum, CourseName, Days, StartTime, EndTime, Location),
-			course_schedule_taught_by(CourseType, CourseNum, CourseName, 'Dr. J Leidig', Days, StartTime, EndTime, Location),
-			R3),
-		write(R3), nl, nl,
+  /* 3. What is Dr. J. Leidigs schedule? */
+    write('3. What is Dr. J. Leidig\'s schedule?'), nl,
+    findall((CourseType, CourseNum, CourseName, Days, StartTime, EndTime, Location),
+        course_schedule_taught_by(CourseType, CourseNum, CourseName, 'Dr. J Leidig', Days, StartTime, EndTime, Location),
+        R3),
+    write(R3), nl, nl,
 		
   /* 4. Who is scheduled to teach what subject on TTH, 10am? */
     write('4. Who is scheduled to teach what subject on TTH, 10am?'), nl,
@@ -203,19 +225,19 @@ print_solution :-
       R7),
     write(R7), nl, nl,
 
-	/* 8. Who is taking CS courses? */
-		write('8. Who is taking CS courses?'), nl,
-		setof((Student),
-			course_types_taken_by_student('CS',Student),
-			R8),
-		write(R8), nl, nl,
+  /* 8. Who is taking CS courses? */
+    write('8. Who is taking CS courses?'), nl,
+    setof((Student),
+      course_types_taken_by_student('CS',Student),
+      R8),
+    write(R8), nl, nl,
 		
-	/* 9. What types of courses are Gaius Baltar taking? */
-		write('9. What types of courses are Gaius Baltar taking?'), nl,
-		setof((CourseType),
-			course_types_taken_by_student(CourseType, 'Gaius Baltar'),
-			R9),
-		write(R9), nl, nl,
+  /* 9. What types of courses are Gaius Baltar taking? */
+    write('9. What types of courses are Gaius Baltar taking?'), nl,
+    setof((CourseType),
+      course_types_taken_by_student(CourseType, 'Gaius Baltar'),
+      R9),
+    write(R9), nl, nl,
 
   /* 10. Are there any scheduling conflicts of professors and locations? */
     write('10. Are there any scheduling conflicts of professors and locations?'), nl, nl,
