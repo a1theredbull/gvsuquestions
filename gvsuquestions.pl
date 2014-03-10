@@ -10,12 +10,14 @@
 /* ----- Facts ----- */
 
 /* Students in our dataset */
+/* Student */
 student('Jim').
 student('Pam').
 student('Kara Thrace').
 student('Gaius Baltar').
 
 /* Courses that students are enrolled in */
+/* Student - Course Number */
 student_enrolled_in('Jim',467).
 student_enrolled_in('Jim',452).
 student_enrolled_in('Jim',457).
@@ -30,7 +32,8 @@ student_enrolled_in('Gaius Baltar',460).
 student_enrolled_in('Gaius Baltar',375).
 student_enrolled_in('Pam',463).
 
-/* Teachers in our dataset */
+/* Teachers in our dataset. */
+/* Teacher */
 teacher('Dr. Schymik').
 teacher('Ms. Peterman').
 teacher('Dr. Engelsma').
@@ -47,7 +50,8 @@ teacher('Mr. Lange').
 teacher('Ms. Posada').
 teacher('Dr. Du').
 
-/* All of the coures in our dataset. Course Type-Number-Name */
+/* All of the coures in our dataset. */
+/* Course Type - Course Number - Course Name */
 course('CS',467,'CS Project').
 course('IS',463,'IS Project').
 course('IS',460,'MIS').
@@ -73,7 +77,8 @@ course('CIS',661,'Medical and Bioinformatics').
 course('CIS',671,'Information Visualization').
 course('CIS',691,'MBI Capstone').
 
-/* Which courses are taught by which professors */
+/* Which courses are taught by which professors. */
+/* Course Number - Teacher */
 course_taught_by(467,'Dr. Engelsma').
 course_taught_by(463,'Mr. Lange').
 course_taught_by(460,'Dr. P Leidig').
@@ -99,7 +104,8 @@ course_taught_by(661,'Dr. J Leidig').
 course_taught_by(671,'Dr. J Leidig').
 course_taught_by(691,'Dr. J Leidig').
 
-/* Course schedules. Course Number - Days - Times(Army) - Location */
+/* Course schedules. */
+/* Course Number - Days - Start Time(Army) - End Time(Army) - Location */
 course_scheduled(467,['Monday','Wednesday','Friday'],1000,1050,'MAK B1118').
 course_scheduled(463,['Monday','Wednesday','Friday'],1400,1450,'MAK D2123').
 course_scheduled(460,['Tuesday','Thursday'],1000,1115,'MAK B1116').
@@ -144,7 +150,7 @@ common_taken_courses(StudentA, StudentB, CourseType, CourseNum, CourseName) :-
   student_enrolled_in(StudentB, CourseNum),
   course(CourseType, CourseNum, CourseName).
 
-/* Time conflicts for classes */
+/* Time conflicts */
 time_conflict(DaysA, StartTimeA, EndTimeA, DaysB, StartTimeB, EndTimeB) :-
   member(Day, DaysA),
   member(Day, DaysB),
@@ -159,7 +165,7 @@ teaching_time_conflict(TeacherA, TeacherB, CourseNumA, DaysA, StartTimeA, EndTim
   time_conflict(DaysA, StartTimeA, StartTimeA, DaysB, StartTimeB, EndTimeB),
   TeacherA \= TeacherB.
 
-/* Location conflicts */
+/* Time and location conflicts */
 teaching_time_location_conflict(TeacherA, TeacherB, CourseNumA, DaysA, StartTimeA, EndTimeA, CourseNumB, DaysB, StartTimeB, EndTimeB, Location) :-
   course_taught_by(CourseNumA, TeacherA),
   course_taught_by(CourseNumB, TeacherB),
@@ -168,7 +174,7 @@ teaching_time_location_conflict(TeacherA, TeacherB, CourseNumA, DaysA, StartTime
   time_conflict(DaysA, StartTimeA, StartTimeA, DaysB, StartTimeB, EndTimeB),
   TeacherA \= TeacherB.
 
-/* Time conflict with the same professor */
+/* Time conflicts with same professor */
 teaching_time_professor_conflict(Teacher, CourseNumA, DaysA, StartTimeA, EndTimeA, CourseNumB, DaysB, StartTimeB, EndTimeB) :-
   course_taught_by(CourseNumA, Teacher),
   course_taught_by(CourseNumB, Teacher),
